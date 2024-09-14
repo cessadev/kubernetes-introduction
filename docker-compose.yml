@@ -1,0 +1,35 @@
+services:
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo_userdb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - mcsv-network
+
+  app:
+    container_name: app
+    image: app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: mongodb://root:example@mongo:27017/userdb?authSource=admin
+    ports:
+      - "8080:8080"
+    networks:
+      - mcsv-network
+    
+volumes:
+  mongo-data:
+
+networks:
+  mcsv-network:
