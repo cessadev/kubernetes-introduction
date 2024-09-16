@@ -11,6 +11,8 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jdk-alpine
 
+RUN apk update && apk add curl
+
 WORKDIR /app
 
 COPY --from=builder /app/target/api-0.0.1-SNAPSHOT.jar app.jar

@@ -17,15 +17,31 @@ spec:
       - name: app-k8s-v2
         image: app-k8s-v2
         imagePullPolicy: Never
+        ports:
+          - containerPort: 8080
         resources:
           limits:
-            memory: "512Mi" # Aumenta la memoria
+            memory: "512Mi"
             cpu: "500m"
           requests:
-            memory: "256Mi"  # Aumenta la memoria solicitada
+            memory: "256Mi"
             cpu: "250m"
-        ports:
-        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 90  # Time to wait before the probe begins
+          periodSeconds: 20 # How many seconds should you check
+          timeoutSeconds: 10
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 60   # Time to wait before the probe begins
+          periodSeconds: 10 # How many seconds should you check
+          timeoutSeconds: 10
+          failureThreshold: 5
         env:
         - name: MONGO_URI
           valueFrom:
