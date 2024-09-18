@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kibana-config
+  namespace: kube-system
+data:
+  kibana.yml: |
+    server.name: kibana
+    server.host: "0.0.0.0"
+    elasticsearch.hosts: ["http://elasticsearch-logging:9200"]
+    xpack.encryptedSavedObjects.encryptionKey: b72d7308d4df6335665b05089f004656
+    xpack.reporting.encryptionKey: d74ab6d75890458312661739831fac84
+    xpack.security.encryptionKey: b8e6622e536ff81f3c972d2937a76dd7
+    xpack.security.enabled: false
+    logging.verbose: true
